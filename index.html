@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY MARKET - سوقي الإلكتروني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        :root {
+            --primary: #2a5d8a;
+            --secondary: #f39c12;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            padding-bottom: 70px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* شريط التنقل */
+        .navbar {
+            background: linear-gradient(to right, var(--primary), #1a3a5a);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+        
+        .navbar.scrolled {
+            padding: 8px 0;
+        }
+        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .logo i {
+            margin-left: 10px;
+            color: var(--secondary);
+            transition: transform 0.5s ease;
+        }
+        
+        .logo:hover i {
+            transform: rotate(15deg);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 10px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background 0.3s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after, 
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover, 
+        .nav-links a.active {
+            transform: translateY(-2px);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .lang-switcher {
+            margin-left: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 7px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .lang-switcher:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .auth-buttons button {
+            background: var(--secondary);
+            border: none;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-left: 10px;
+            transition: transform 0.2s, background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .auth-buttons button:hover {
+            transform: translateY(-3px);
+            background: #e67e22;
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        /* شريط البحث */
+        .search-container {
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .search-bar {
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 15px 25px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-bar button:hover {
+            background: #1a3a5a;
+        }
+        
+        /* الصفحات */
+        .page {
+            display: none;
+            padding: 20px 0;
+            animation: fadeIn 0.8s ease;
+            min-height: 70vh;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            margin: 20px 0;
+            padding-bottom: 10px;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title h2 {
+            font-size: 1.8rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        /* شريط التنقل السفلي */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-item.active i {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .nav-item:hover i {
+            transform: translateY(-3px);
+        }
+        
+        /* فئات المتاجر */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .category {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .category:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+            border-color: var(--secondary);
+        }
+        
+        .category i {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            transition: transform 0.5s;
+        }
+        
+        .category:hover i {
+            transform: scale(1.2);
+        }
+        
+        .category-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .category:hover .category-name {
+            color: var(--secondary);
+        }
+        
+        /* المتاجر */
+        .stores {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .store-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .store-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .store-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s ease;
+        }
+        
+        .store-card:hover .store-image {
+            transform: scale(1.05);
+        }
+        
+        .store-info {
+            padding: 20px;
+        }
+        
+        .store-name {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        
+        .store-card:hover .store-name {
+            color: var(--secondary);
+        }
+        
+        .store-category {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            background: #f0f7ff;
+            padding: 4px 8px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .stars {
+            color: #ffc107;
+            margin-left: 5px;
+        }
+        
+        .reviews {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* نماذج التسجيل */
+        .auth-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+        
+        .auth-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .auth-header h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .auth-header p {
+            color: var(--gray);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(42, 93, 138, 0.1);
+        }
+        
+        .user-type {
+            display: flex;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e9ecef;
+        }
+        
+        .user-type label {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .user-type input[type="radio"] {
+            display: none;
+        }
+        
+        .user-type input[type="radio"]:checked + label {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            margin-top: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            background: #1a3a5a;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #e67e22;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .form-footer a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        /* الصفحة الشخصية */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+        
+        .profile-header:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+        
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--light-gray);
+            margin-left: 20px;
+            transition: transform 0.5s ease;
+        }
+        
+        .profile-header:hover .profile-image {
+            transform: scale(1.05);
+        }
+        
+        .profile-info h2 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0 15px;
+            transition: transform 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-item:not(:last-child) {
+            border-left: 1px solid var(--light-gray);
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .profile-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .profile-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* العروض والمنتجات */
+        .offers-grid, .used-items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .offer-card, .used-item-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+        
+        .offer-card:hover, .used-item-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .offer-image, .used-item-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transition: transform 0.5s ease;
+        }
+        
+        .offer-card:hover .offer-image,
+        .used-item-card:hover .used-item-image {
+            transform: scale(1.05);
+        }
+        
+        .offer-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .offer-info, .used-item-info {
+            padding: 15px;
+        }
+        
+        .offer-title, .used-item-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        
+        .offer-card:hover .offer-title,
+        .used-item-card:hover .used-item-title {
+            color: var(--secondary);
+        }
+        
+        .offer-price, .used-item-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .offer-store, .used-item-contact {
+            display: flex;
+            align-items: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .offer-store i, .used-item-contact i {
+            margin-left: 5px;
+        }
+        
+        /* التذييل */
+        footer {
+            background: linear-gradient(to right, #1a3a5a, var(--primary));
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 50px;
+            position: relative;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
+        }
+        
+        .footer-section p {
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+            display: inline-block;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .contact-item i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* الصفحة العربية */
+        [dir="rtl"] {
+            text-align: right;
+        }
+        
+        [dir="rtl"] .user-type label {
+            margin-left: 10px;
+        }
+        
+        [dir="rtl"] .stat-item:not(:last-child) {
+            border-left: none;
+            border-right: 1px solid var(--light-gray);
+        }
+        
+        [lang="en"] {
+            direction: ltr;
+            text-align: left;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        [lang="en"] [dir="rtl"] {
+            text-align: left;
+        }
+        
+        [lang="en"] .stat-item:not(:last-child) {
+            border-right: none;
+            border-left: 1px solid var(--light-gray);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .categories {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .navbar .container {
+                flex-wrap: wrap;
+            }
+            
+            .user-actions {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .auth-buttons button {
+                margin: 5px 0;
+            }
+            
+            .search-bar input {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-shopping-bag"></i>
+                <span>MY MARKET</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="#" class="active" data-page="home">الرئيسية</a></li>
+                <li><a href="#" data-page="offers">العروض</a></li>
+                <li><a href="#" data-page="used-market">سوق المستعمل</a></li>
+                <li><a href="#" data-page="account">حسابي</a></li>
+            </ul>
+            
+            <div class="user-actions">
+                <button class="lang-switcher" id="langSwitcher">English</button>
+                <div class="auth-buttons">
+                    <button id="loginBtn">تسجيل الدخول</button>
+                    <button id="signupBtn" class="btn-secondary">إنشاء حساب</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- محتوى الصفحات -->
+    <div class="container">
+        <!-- الصفحة الرئيسية -->
+        <div id="home" class="page active">
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" placeholder="ابحث عن متجر أو منتج...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <div class="section-title">
+                <h2>أقسام المتاجر</h2>
+                <span>تصفح حسب التصنيف</span>
+            </div>
+            
+            <div class="categories">
+                <!-- سيتم ملئها بالجافاسكريبت -->
+            </div>
+            
+            <div class="section-title">
+                <h2>أفضل المتاجر</h2>
+                <span>بناءً على تقييم العملاء</span>
+            </div>
+            
+            <div class="stores">
+                <!-- سيتم ملئها بالجافاسكريبت -->
+            </div>
+        </div>
+        
+        <!-- صفحة العروض -->
+        <div id="offers" class="page">
+            <div class="section-title">
+                <h2>العروض المميزة</h2>
+                <span>عروض لمدة 24 ساعة فقط</span>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" placeholder="ابحث عن عروض...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <div class="offers-grid">
+                <!-- سيتم ملئها بالجافاسكريبت -->
+            </div>
+        </div>
+        
+        <!-- صفحة سوق المستعمل -->
+        <div id="used-market" class="page">
+            <div class="section-title">
+                <h2>سوق المستعمل</h2>
+                <span>اغراض مستعملة بجودة عالية</span>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" placeholder="ابحث عن منتجات مستعملة...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <div class="used-items-grid">
+                <!-- سيتم ملئها بالجافاسكريبت -->
+            </div>
+        </div>
+        
+        <!-- صفحة الحساب -->
+        <div id="account" class="page">
+            <div class="profile-header">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة المستخدم" class="profile-image">
+                <div class="profile-info">
+                    <h2 id="userName">محمد أحمد</h2>
+                    <p id="userType">عميل</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">تقييمات</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">تعليقات</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">منتجات</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-tabs">
+                <div class="profile-tab active">المعلومات الشخصية</div>
+                <div class="profile-tab">التقييمات</div>
+                <div class="profile-tab">منتجاتي</div>
+            </div>
+            
+            <div class="auth-container">
+                <h3>المعلومات الشخصية</h3>
+                <form id="accountForm">
+                    <div class="form-group">
+                        <label for="firstName">الاسم الأول</label>
+                        <input type="text" id="firstName" class="form-control" value="محمد">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">الاسم الأخير</label>
+                        <input type="text" id="lastName" class="form-control" value="أحمد">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني</label>
+                        <input type="email" id="email" class="form-control" value="mohamed@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف</label>
+                        <input type="tel" id="phone" class="form-control" value="+20123456789">
+                    </div>
+                    <button class="btn" type="button" id="saveChangesBtn">حفظ التغييرات</button>
+                    <button class="btn btn-secondary" id="logoutBtn">تسجيل الخروج</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- صفحة تسجيل الدخول -->
+        <div id="login" class="page">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>تسجيل الدخول</h2>
+                    <p>أدخل بياناتك للدخول إلى حسابك</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">البريد الإلكتروني</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="ادخل بريدك الإلكتروني" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">كلمة المرور</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="ادخل كلمة المرور" required>
+                    </div>
+                    <button class="btn" type="submit">تسجيل الدخول</button>
+                    <div class="form-footer">
+                        <p>ليس لديك حساب؟ <a href="#" id="goToSignup">إنشاء حساب جديد</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- صفحة إنشاء حساب -->
+        <div id="signup" class="page">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>إنشاء حساب جديد</h2>
+                    <p>اختر نوع الحساب المناسب لك</p>
+                </div>
+                <form id="signupForm">
+                    <div class="user-type">
+                        <input type="radio" id="customerType" name="userType" value="customer" checked>
+                        <label for="customerType">عميل</label>
+                        
+                        <input type="radio" id="ownerType" name="userType" value="owner">
+                        <label for="ownerType">مالك متجر</label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupEmail">البريد الإلكتروني</label>
+                        <input type="email" id="signupEmail" class="form-control" placeholder="ادخل بريدك الإلكتروني" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">كلمة المرور</label>
+                        <input type="password" id="signupPassword" class="form-control" placeholder="اختر كلمة مرور قوية" required>
+                    </div>
+                    
+                    <div id="customerFields">
+                        <div class="form-group">
+                            <label for="firstNameSignup">الاسم الأول</label>
+                            <input type="text" id="firstNameSignup" class="form-control" placeholder="ادخل اسمك الأول" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastNameSignup">الاسم الأخير</label>
+                            <input type="text" id="lastNameSignup" class="form-control" placeholder="ادخل اسمك الأخير" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileImage">صورة الملف الشخصي</label>
+                            <input type="file" id="profileImage" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div id="ownerFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="ownerFirstName">الاسم الأول</label>
+                            <input type="text" id="ownerFirstName" class="form-control" placeholder="ادخل اسمك الأول" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ownerLastName">الاسم الأخير</label>
+                            <input type="text" id="ownerLastName" class="form-control" placeholder="ادخل اسمك الأخير" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ownerImage">صورة مالك المتجر</label>
+                            <input type="file" id="ownerImage" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="storeName">اسم المتجر</label>
+                            <input type="text" id="storeName" class="form-control" placeholder="ادخل اسم المتجر" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="storeCategory">نوع المتجر</label>
+                            <select id="storeCategory" class="form-control" required>
+                                <option value="restaurants">مطاعم</option>
+                                <option value="grocery">بقالة</option>
+                                <option value="pharmacies">صيدليات</option>
+                                <option value="coffee">قهوة وحلويات</option>
+                                <option value="clothing">ملابس وأزياء</option>
+                                <option value="meat">لحوم-طيور-اسماك</option>
+                                <option value="computers">كمبيوتر وانترنت</option>
+                                <option value="real-estate">عقارات وأملاك</option>
+                                <option value="mobile">موبايل واكسسوارات</option>
+                                <option value="perfumes">عطور ومستلزمات صحية</option>
+                                <option value="juice">عصائر</option>
+                                <option value="cleaning">منظفات</option>
+                                <option value="bookstores">مكتبات</option>
+                                <option value="cars">سيارات وتوصيل</option>
+                                <option value="home">أدوات منزلية ومطبخ</option>
+                                <option value="electricity">كهرباء وسباكة ودهانات</option>
+                                <option value="games">ألعاب</option>
+                                <option value="maintenance">خدمات الصيانة</option>
+                                <option value="jewelry">ذهب وفضة</option>
+                                <option value="snacks">تسالي ومقرمشات</option>
+                                <option value="services">الخدمات العامة</option>
+                                <option value="beauty">الصحة والجمال</option>
+                                <option value="factories">مصانع</option>
+                                <option value="pets">حيوانات أليفة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="storeImages">صور المتجر (حد أقصى 10 صور)</label>
+                            <input type="file" id="storeImages" class="form-control" multiple>
+                        </div>
+                        
+                        <div class="form-group" id="menuFileContainer">
+                            <label for="menuFile">قائمة الطعام (للمطاعم فقط)</label>
+                            <input type="file" id="menuFile" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phoneOwner">رقم الهاتف</label>
+                            <input type="tel" id="phoneOwner" class="form-control" placeholder="ادخل رقم الهاتف" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile">رقم الموبايل</label>
+                            <input type="tel" id="mobile" class="form-control" placeholder="ادخل رقم الموبايل" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="facebook">رابط الفيسبوك</label>
+                            <input type="url" id="facebook" class="form-control" placeholder="ادخل رابط صفحة الفيسبوك">
+                        </div>
+                        <div class="form-group">
+                            <label for="instagram">رابط الانستجرام</label>
+                            <input type="url" id="instagram" class="form-control" placeholder="ادخل رابط صفحة الانستجرام">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="location">الموقع الجغرافي</label>
+                            <button class="btn location-btn" type="button">حدد الموقع على الخريطة</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn" type="submit">إنشاء حساب</button>
+                    <div class="form-footer">
+                        <p>هل لديك حساب؟ <a href="#" id="goToLogin">تسجيل الدخول</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- التذييل -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>نبذة عن التطبيق</h3>
+                    <p>
+                        تطبيق MY MARKET هو منصة إلكترونية متكاملة تهدف إلى ربط المتاجر المحلية بالعملاء، 
+                        وتوفير تجربة تسوق فريدة مع دعم كامل للغة العربية. نسعى لخلق مجتمع تسوق تفاعلي 
+                        يلبي جميع احتياجات المستخدمين.
+                    </p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" data-page="home">الرئيسية</a></li>
+                        <li><a href="#" data-page="offers">العروض</a></li>
+                        <li><a href="#" data-page="used-market">سوق المستعمل</a></li>
+                        <li><a href="#" data-page="account">حسابي</a></li>
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                        <li><a href="#">شروط الاستخدام</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>الدعم والاتصال</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>شارع التسوق، مدينة الأعمال، المملكة العربية السعودية</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+966 123 456 789</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>support@mymarket.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <span>الأحد - الخميس: 8 صباحاً - 10 مساءً</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2023 MY MARKET. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- شريط التنقل السفلي -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" data-page="home">
+            <i class="fas fa-home"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="#" class="nav-item" data-page="offers">
+            <i class="fas fa-percent"></i>
+            <span>العروض</span>
+        </a>
+        <a href="#" class="nav-item" data-page="used-market">
+            <i class="fas fa-recycle"></i>
+            <span>المستعمل</span>
+        </a>
+        <a href="#" class="nav-item" data-page="account">
+            <i class="fas fa-user"></i>
+            <span>حسابي</span>
+        </a>
+    </div>
+    
+    <script>
+        // بيانات التطبيق
+        const categories = [
+            { id: 'restaurants', name: 'مطاعم', icon: 'fa-utensils' },
+            { id: 'grocery', name: 'بقالة', icon: 'fa-shopping-cart' },
+            { id: 'pharmacies', name: 'صيدليات', icon: 'fa-prescription-bottle' },
+            { id: 'coffee', name: 'قهوة وحلويات', icon: 'fa-coffee' },
+            { id: 'clothing', name: 'ملابس وأزياء', icon: 'fa-tshirt' },
+            { id: 'meat', name: 'لحوم-طيور-أسماك', icon: 'fa-drumstick-bite' },
+            { id: 'computers', name: 'كمبيوتر وانترنت', icon: 'fa-laptop' },
+            { id: 'real-estate', name: 'عقارات وأملاك', icon: 'fa-building' },
+            { id: 'mobile', name: 'موبايل واكسسوارات', icon: 'fa-mobile-alt' },
+            { id: 'perfumes', name: 'عطور ومستلزمات صحية', icon: 'fa-spray-can' },
+            { id: 'juice', name: 'عصائر', icon: 'fa-glass-whiskey' },
+            { id: 'cleaning', name: 'منظفات', icon: 'fa-pump-soap' },
+            { id: 'bookstores', name: 'مكتبات', icon: 'fa-book' },
+            { id: 'cars', name: 'سيارات وتوصيل', icon: 'fa-car' },
+            { id: 'home', name: 'أدوات منزلية ومطبخ', icon: 'fa-home' },
+            { id: 'electricity', name: 'كهرباء وسباكة ودهانات', icon: 'fa-tools' },
+            { id: 'games', name: 'ألعاب', icon: 'fa-gamepad' },
+            { id: 'maintenance', name: 'خدمات الصيانة', icon: 'fa-wrench' },
+            { id: 'jewelry', name: 'ذهب وفضة', icon: 'fa-gem' },
+            { id: 'snacks', name: 'تسالي ومقرمشات', icon: 'fa-cookie' },
+            { id: 'services', name: 'الخدمات العامة', icon: 'fa-concierge-bell' },
+            { id: 'beauty', name: 'الصحة والجمال', icon: 'fa-spa' },
+            { id: 'factories', name: 'مصانع', icon: 'fa-industry' },
+            { id: 'pets', name: 'حيوانات أليفة', icon: 'fa-paw' }
+        ];
+        
+        const stores = [
+            {
+                id: 1,
+                name: 'مطعم اللذة الشرقية',
+                category: 'restaurants',
+                image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                rating: 4.7,
+                reviews: 124
+            },
+            {
+                id: 2,
+                name: 'بقالة الندى',
+                category: 'grocery',
+                image: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                rating: 4.3,
+                reviews: 89
+            },
+            {
+                id: 3,
+                name: 'صيدلية الحياة',
+                category: 'pharmacies',
+                image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                rating: 4.8,
+                reviews: 210
+            },
+            {
+                id: 4,
+                name: 'مقهى الفرسان',
+                category: 'coffee',
+                image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                rating: 4.5,
+                reviews: 156
+            }
+        ];
+        
+        const offers = [
+            {
+                id: 1,
+                title: 'عرض خاص على سمك السلمون',
+                store: 'بقالة الندى',
+                price: '35 ريال',
+                originalPrice: '50 ريال',
+                image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                rating: 4.2,
+                reviews: 24
+            },
+            {
+                id: 2,
+                title: 'عروض الصيف على المشروبات',
+                store: 'مقهى الفرسان',
+                price: '15 ريال',
+                originalPrice: '25 ريال',
+                image: 'https://images.unsplash.com/photo-1554119921-3e1d58f8c858?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                rating: 4.6,
+                reviews: 18
+            },
+            {
+                id: 3,
+                title: 'خصم 30% على أدوات التنظيف',
+                store: 'صيدلية الحياة',
+                price: '42 ريال',
+                originalPrice: '60 ريال',
+                image: 'https://images.unsplash.com/photo-1595425970377-6ab9d7e1b0c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                rating: 4.0,
+                reviews: 32
+            }
+        ];
+        
+        const usedItems = [
+            {
+                id: 1,
+                title: 'آيفون 11 برو ماكس',
+                price: '2500 ريال',
+                image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                contact: '0543210987'
+            },
+            {
+                id: 2,
+                title: 'لابتوب ديل الجديد',
+                price: '3200 ريال',
+                image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                contact: '0551234567'
+            },
+            {
+                id: 3,
+                title: 'غسالة أوتوماتيك بحالة ممتازة',
+                price: '800 ريال',
+                image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                contact: '0567890123'
+            }
+        ];
+        
+        // وظائف التطبيق
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحميل الفئات
+            renderCategories();
+            
+            // تحميل المتاجر
+            renderStores();
+            
+            // تحميل العروض
+            renderOffers();
+            
+            // تحميل منتجات المستعمل
+            renderUsedItems();
+            
+            // التنقل بين الصفحات
+            setupNavigation();
+            
+            // تبديل اللغة
+            setupLanguageToggle();
+            
+            // تبديل نوع الحساب في التسجيل
+            setupAccountTypeToggle();
+            
+            // إظهار/إخفاء قائمة الطعام عند تغيير نوع المتجر
+            setupStoreCategoryChange();
+            
+            // تأثير شريط التنقل عند التمرير
+            setupNavbarScrollEffect();
+            
+            // إضافة تأثيرات للروابط في التذييل
+            setupFooterLinks();
+            
+            // إعداد معالجات أحداث النماذج
+            setupFormHandlers();
+            
+            // تحقق من حالة تسجيل الدخول
+            checkLoginStatus();
+        });
+        
+        function renderCategories() {
+            const container = document.querySelector('.categories');
+            container.innerHTML = '';
+            
+            categories.forEach(cat => {
+                const categoryEl = document.createElement('div');
+                categoryEl.className = 'category';
+                categoryEl.innerHTML = `
+                    <i class="fas ${cat.icon}"></i>
+                    <div class="category-name">${cat.name}</div>
+                `;
+                container.appendChild(categoryEl);
+            });
+        }
+        
+        function renderStores() {
+            const container = document.querySelector('.stores');
+            container.innerHTML = '';
+            
+            stores.forEach(store => {
+                const storeEl = document.createElement('div');
+                storeEl.className = 'store-card';
+                storeEl.innerHTML = `
+                    <div class="store-image" style="background-image: url('${store.image}')"></div>
+                    <div class="store-info">
+                        <div class="store-name">${store.name}</div>
+                        <div class="store-category">${categories.find(c => c.id === store.category).name}</div>
+                        <div class="rating">
+                            <div class="stars">
+                                ${renderStars(store.rating)}
+                            </div>
+                            <div class="reviews">(${store.reviews} تقييم)</div>
+                        </div>
+                        <button class="btn">زيارة المتجر</button>
+                    </div>
+                `;
+                container.appendChild(storeEl);
+            });
+        }
+        
+        function renderOffers() {
+            const container = document.querySelector('.offers-grid');
+            container.innerHTML = '';
+            
+            offers.forEach(offer => {
+                const offerEl = document.createElement('div');
+                offerEl.className = 'offer-card';
+                offerEl.innerHTML = `
+                    <div class="offer-image" style="background-image: url('${offer.image}')">
+                        <div class="offer-badge">خصم 30%</div>
+                    </div>
+                    <div class="offer-info">
+                        <div class="offer-title">${offer.title}</div>
+                        <div class="offer-price">${offer.price} <span style="text-decoration: line-through; color: var(--gray); font-size: 0.9rem;">${offer.originalPrice}</span></div>
+                        <div class="offer-store">
+                            <i class="fas fa-store"></i>
+                            <span>${offer.store}</span>
+                        </div>
+                        <div class="rating" style="margin-top: 10px;">
+                            <div class="stars">
+                                ${renderStars(offer.rating)}
+                            </div>
+                            <div class="reviews">(${offer.reviews} تقييم)</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(offerEl);
+            });
+        }
+        
+        function renderUsedItems() {
+            const container = document.querySelector('.used-items-grid');
+            container.innerHTML = '';
+            
+            usedItems.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'used-item-card';
+                itemEl.innerHTML = `
+                    <div class="used-item-image" style="background-image: url('${item.image}')"></div>
+                    <div class="used-item-info">
+                        <div class="used-item-title">${item.title}</div>
+                        <div class="used-item-price">${item.price}</div>
+                        <div class="used-item-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>${item.contact}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(itemEl);
+            });
+        }
+        
+        function renderStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (halfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+        
+        function setupNavigation() {
+            // شريط التنقل العلوي
+            document.querySelectorAll('.nav-links a, .bottom-nav .nav-item, .footer-links a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // إخفاء جميع الصفحات
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // إزالة النشط من عناصر التنقل
+                    document.querySelectorAll('.nav-links a, .bottom-nav .nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // إظهار الصفحة المطلوبة
+                    const pageId = this.getAttribute('data-page');
+                    document.getElementById(pageId).classList.add('active');
+                    this.classList.add('active');
+                    
+                    // تحديث شريط التنقل السفلي
+                    document.querySelectorAll(`.bottom-nav .nav-item[data-page="${pageId}"]`).forEach(item => {
+                        item.classList.add('active');
+                    });
+                });
+            });
+            
+            // أزرار تسجيل الدخول والتسجيل
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById('login').classList.add('active');
+            });
+            
+            document.getElementById('signupBtn').addEventListener('click', function() {
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById('signup').classList.add('active');
+            });
+            
+            // التنقل بين تسجيل الدخول والتسجيل
+            document.getElementById('goToSignup').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('login').classList.remove('active');
+                document.getElementById('signup').classList.add('active');
+            });
+            
+            document.getElementById('goToLogin').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('signup').classList.remove('active');
+                document.getElementById('login').classList.add('active');
+            });
+        }
+        
+        function setupLanguageToggle() {
+            const langSwitcher = document.getElementById('langSwitcher');
+            langSwitcher.addEventListener('click', function() {
+                const currentLang = document.documentElement.lang;
+                const newLang = currentLang === 'ar' ? 'en' : 'ar';
+                
+                document.documentElement.lang = newLang;
+                langSwitcher.textContent = newLang === 'ar' ? 'English' : 'العربية';
+                
+                // تغيير اتجاه الصفحة
+                document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+                
+                // تغيير النصوص حسب اللغة
+                if (newLang === 'en') {
+                    document.querySelector('.logo span').textContent = 'MY MARKET';
+                    document.querySelector('[data-page="home"]').textContent = 'Home';
+                    document.querySelector('[data-page="offers"]').textContent = 'Offers';
+                    document.querySelector('[data-page="used-market"]').textContent = 'Used Market';
+                    document.querySelector('[data-page="account"]').textContent = 'Account';
+                    document.querySelector('.logo i').style.marginLeft = '0';
+                    document.querySelector('.logo i').style.marginRight = '10px';
+                    
+                    // تحديث عناصر واجهة المستخدم
+                    document.querySelector('#home .section-title h2').textContent = 'Store Categories';
+                    document.querySelector('#home .section-title span').textContent = 'Browse by category';
+                    document.querySelector('#home .section-title:nth-child(3) h2').textContent = 'Top Stores';
+                    document.querySelector('#home .section-title:nth-child(3) span').textContent = 'Based on customer ratings';
+                    
+                    document.querySelector('#offers .section-title h2').textContent = 'Special Offers';
+                    document.querySelector('#offers .section-title span').textContent = '24-hour deals only';
+                    
+                    document.querySelector('#used-market .section-title h2').textContent = 'Used Market';
+                    document.querySelector('#used-market .section-title span').textContent = 'High quality used items';
+                    
+                    document.querySelector('#account .auth-container h3').textContent = 'Personal Information';
+                    document.querySelector('#account .profile-tabs .profile-tab:nth-child(1)').textContent = 'Personal Info';
+                    document.querySelector('#account .profile-tabs .profile-tab:nth-child(2)').textContent = 'Reviews';
+                    document.querySelector('#account .profile-tabs .profile-tab:nth-child(3)').textContent = 'My Products';
+                    
+                    document.querySelector('#login .auth-header h2').textContent = 'Login';
+                    document.querySelector('#login .auth-header p').textContent = 'Enter your credentials to access your account';
+                    
+                    document.querySelector('#signup .auth-header h2').textContent = 'Create Account';
+                    document.querySelector('#signup .auth-header p').textContent = 'Choose the account type that suits you';
+                    
+                    // تحديث النصوص في شريط التنقل السفلي
+                    document.querySelector('.bottom-nav [data-page="home"] span').textContent = 'Home';
+                    document.querySelector('.bottom-nav [data-page="offers"] span').textContent = 'Offers';
+                    document.querySelector('.bottom-nav [data-page="used-market"] span').textContent = 'Used';
+                    document.querySelector('.bottom-nav [data-page="account"] span').textContent = 'Account';
+                } else {
+                    document.querySelector('.logo span').textContent = 'MY MARKET';
+                    document.querySelector('[data-page="home"]').textContent = 'الرئيسية';
+                    document.querySelector('[data-page="offers"]').textContent = 'العروض';
+                    document.querySelector('[data-page="used-market"]').textContent = 'سوق المستعمل';
+                    document.querySelector('[data-page="account"]').textContent = 'حسابي';
+                    document.querySelector('.logo i').style.marginRight = '0';
+                    document.querySelector('.logo i').style.marginLeft = '10px';
+                    
+                    // تحديث عناصر واجهة المستخدم
+                    document.querySelector('#home .section-title h2').textContent = 'أقسام المتاجر';
+                    document.querySelector('#home .section-title span').textContent = 'تصفح حسب التصنيف';
+                    document.querySelector('#home .section-title:nth-child(3) h2').textContent = 'أفضل المتاجر';
+                    document.querySelector('#home .section-title:nth-child(3) span').textContent = 'بناءً على تقييم العملاء';
+                    
+                    document.querySelector('#offers .section-title h2').textContent = 'العروض المميزة';
+                    document.querySelector('#offers .section-title span').textContent = 'عروض لمدة 24 ساعة فقط';
+                    
+                    document.querySelector('#used-market .section-title h2').textContent = 'سوق المستعمل';
+                    document.querySelector('#used-market .section-title span').textContent = 'اغراض مستعملة بجودة عالية';
+                    
+                    document.querySelector('#account .auth-container h3').textContent = 'المعلومات الشخصية';
+                    document.querySelector('#account .profile-tabs .profile-tab:nth-child(1)').textContent = 'المعلومات الشخصية';
+                    document.querySelector('#account .profile-tabs .profile-tab:nth-child(2)').textContent = 'التقييمات';
+                    document.querySelector('#account .profile-tabs .profile-tab:nth-child(3)').textContent = 'منتجاتي';
+                    
+                    document.querySelector('#login .auth-header h2').textContent = 'تسجيل الدخول';
+                    document.querySelector('#login .auth-header p').textContent = 'أدخل بياناتك للدخول إلى حسابك';
+                    
+                    document.querySelector('#signup .auth-header h2').textContent = 'إنشاء حساب جديد';
+                    document.querySelector('#signup .auth-header p').textContent = 'اختر نوع الحساب المناسب لك';
+                    
+                    // تحديث النصوص في شريط التنقل السفلي
+                    document.querySelector('.bottom-nav [data-page="home"] span').textContent = 'الرئيسية';
+                    document.querySelector('.bottom-nav [data-page="offers"] span').textContent = 'العروض';
+                    document.querySelector('.bottom-nav [data-page="used-market"] span').textContent = 'المستعمل';
+                    document.querySelector('.bottom-nav [data-page="account"] span').textContent = 'حسابي';
+                }
+            });
+        }
+        
+        function setupAccountTypeToggle() {
+            const customerType = document.getElementById('customerType');
+            const ownerType = document.getElementById('ownerType');
+            const customerFields = document.getElementById('customerFields');
+            const ownerFields = document.getElementById('ownerFields');
+            
+            customerType.addEventListener('change', function() {
+                if (this.checked) {
+                    customerFields.style.display = 'block';
+                    ownerFields.style.display = 'none';
+                }
+            });
+            
+            ownerType.addEventListener('change', function() {
+                if (this.checked) {
+                    customerFields.style.display = 'none';
+                    ownerFields.style.display = 'block';
+                }
+            });
+        }
+        
+        function setupStoreCategoryChange() {
+            const storeCategory = document.getElementById('storeCategory');
+            const menuFileContainer = document.getElementById('menuFileContainer');
+            
+            // إخفاء قائمة الطعام في البداية
+            menuFileContainer.style.display = 'none';
+            
+            storeCategory.addEventListener('change', function() {
+                if (this.value === 'restaurants') {
+                    menuFileContainer.style.display = 'block';
+                } else {
+                    menuFileContainer.style.display = 'none';
+                }
+            });
+        }
+        
+        function setupNavbarScrollEffect() {
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+        
+        function setupFooterLinks() {
+            document.querySelectorAll('.footer-links a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.getAttribute('data-page')) {
+                        e.preventDefault();
+                        const pageId = this.getAttribute('data-page');
+                        
+                        // إخفاء جميع الصفحات
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.classList.remove('active');
+                        });
+                        
+                        // إظهار الصفحة المطلوبة
+                        document.getElementById(pageId).classList.add('active');
+                        
+                        // تحديث التنقل
+                        document.querySelectorAll('.nav-links a, .bottom-nav .nav-item').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        
+                        document.querySelectorAll(`[data-page="${pageId}"]`).forEach(item => {
+                            item.classList.add('active');
+                        });
+                    }
+                });
+            });
+        }
+        
+        function setupFormHandlers() {
+            // معالج تسجيل الدخول
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                loginUser();
+            });
+            
+            // معالج إنشاء الحساب
+            document.getElementById('signupForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                signupUser();
+            });
+            
+            // معالج تسجيل الخروج
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                logoutUser();
+            });
+            
+            // معالج حفظ التغييرات في الحساب
+            document.getElementById('saveChangesBtn').addEventListener('click', function() {
+                saveAccountChanges();
+            });
+        }
+        
+        function checkLoginStatus() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                updateProfilePage(currentUser);
+            }
+        }
+        
+        function loginUser() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // استرجاع المستخدمين من localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // البحث عن المستخدم
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // تخزين المستخدم الحالي
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                // تحديث صفحة الحساب
+                updateProfilePage(user);
+                
+                // الانتقال إلى صفحة الحساب
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById('account').classList.add('active');
+                
+                // تحديث التنقل
+                document.querySelectorAll('.nav-links a, .bottom-nav .nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector('[data-page="account"]').classList.add('active');
+                
+                alert('تم تسجيل الدخول بنجاح!');
+            } else {
+                alert('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+            }
+        }
+        
+        function signupUser() {
+            const userType = document.querySelector('input[name="userType"]:checked').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            // استرجاع المستخدمين الحاليين
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // التحقق من عدم وجود حساب بنفس البريد
+            if (users.some(u => u.email === email)) {
+                alert('هذا البريد الإلكتروني مسجل مسبقاً');
+                return;
+            }
+            
+            // إنشاء كائن المستخدم الجديد
+            const newUser = {
+                id: Date.now(),
+                type: userType,
+                email: email,
+                password: password,
+                joinedDate: new Date().toLocaleDateString('ar-EG')
+            };
+            
+            // إضافة بيانات إضافية حسب نوع المستخدم
+            if (userType === 'customer') {
+                newUser.firstName = document.getElementById('firstNameSignup').value;
+                newUser.lastName = document.getElementById('lastNameSignup').value;
+                newUser.phone = '';
+                newUser.stats = { ratings: 0, comments: 0, products: 0 };
+            } else if (userType === 'owner') {
+                newUser.firstName = document.getElementById('ownerFirstName').value;
+                newUser.lastName = document.getElementById('ownerLastName').value;
+                newUser.storeName = document.getElementById('storeName').value;
+                newUser.storeCategory = document.getElementById('storeCategory').value;
+                newUser.phone = document.getElementById('phoneOwner').value;
+                newUser.mobile = document.getElementById('mobile').value;
+                newUser.stats = { ratings: 0, comments: 0, products: 0 };
+            }
+            
+            // إضافة المستخدم الجديد إلى القائمة
+            users.push(newUser);
+            
+            // تخزين المستخدمين في localStorage
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // تخزين المستخدم الحالي
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            
+            // تحديث صفحة الحساب
+            updateProfilePage(newUser);
+            
+            // الانتقال إلى صفحة الحساب
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('account').classList.add('active');
+            
+            // تحديث التنقل
+            document.querySelectorAll('.nav-links a, .bottom-nav .nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector('[data-page="account"]').classList.add('active');
+            
+            alert('تم إنشاء الحساب بنجاح!');
+        }
+        
+        function logoutUser() {
+            // حذف المستخدم الحالي من localStorage
+            localStorage.removeItem('currentUser');
+            
+            // الانتقال إلى الصفحة الرئيسية
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('home').classList.add('active');
+            
+            // تحديث التنقل
+            document.querySelectorAll('.nav-links a, .bottom-nav .nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector('[data-page="home"]').classList.add('active');
+            
+            alert('تم تسجيل الخروج بنجاح!');
+        }
+        
+        function updateProfilePage(user) {
+            // تحديث معلومات المستخدم
+            document.getElementById('userName').textContent = user.firstName + ' ' + user.lastName;
+            document.getElementById('userType').textContent = user.type === 'customer' ? 'عميل' : 'مالك متجر';
+            
+            // تحديث الإحصائيات
+            document.querySelectorAll('.stat-value')[0].textContent = user.stats.ratings;
+            document.querySelectorAll('.stat-value')[1].textContent = user.stats.comments;
+            document.querySelectorAll('.stat-value')[2].textContent = user.stats.products;
+            
+            // تحديث نموذج المعلومات الشخصية
+            document.getElementById('firstName').value = user.firstName || '';
+            document.getElementById('lastName').value = user.lastName || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = user.phone || '';
+        }
+        
+        function saveAccountChanges() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                alert('يجب تسجيل الدخول أولاً');
+                return;
+            }
+            
+            // تحديث بيانات المستخدم
+            currentUser.firstName = document.getElementById('firstName').value;
+            currentUser.lastName = document.getElementById('lastName').value;
+            currentUser.phone = document.getElementById('phone').value;
+            
+            // تحديث المستخدم الحالي في localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // تحديث جميع المستخدمين
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            // تحديث صفحة الحساب
+            updateProfilePage(currentUser);
+            
+            alert('تم حفظ التغييرات بنجاح!');
+        }
+    </script>
+</body>
+</html>
